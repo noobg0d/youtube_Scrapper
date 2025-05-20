@@ -1,152 +1,147 @@
-
-📺 YouTube Scrapper
-
-A flexible, command-line-based YouTube metadata and thumbnail scraper using the YouTube Data API v3. Built for developers, researchers, and content analysts who want structured access to channel or video metadata without using a browser.
-
-
-## 🚀 Features
-
-- 🔍 Scrapes metadata like title, description, channel name, views, publish date, etc.
-- 🖼️ Downloads thumbnails with clean, valid filenames
-- 📦 Saves results in CSV format for further analysis
-- ⚙️ CLI support with `argparse` to select platform (currently supports YouTube only)
-- ⏱️ Progress bars and informative logs for better UX
-- 🔐 API key-based access using YouTube Data API v3
+Here you go, Pranesh — a **complete `README.md`** file that covers everything from cloning the repo to running the script, with all the advanced details included.
 
 ---
 
-## 🧰 Installation
+````markdown
+# 🎥 YouTube Scraper CLI Tool
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/noobg0d/youtube_Scrapper.git
-   cd youtube_Scrapper
-````
-
-2. Create a virtual environment:
-
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-3. Install dependencies:
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. Add your YouTube API key to the script or `.env` file:
-
-   ```env
-   YOUTUBE_API_KEY=your_api_key_here
-   ```
+A lightweight Python script that fetches metadata and thumbnails from YouTube videos based on a search keyword. Useful for research, dataset creation, or content analysis.
 
 ---
 
-## 📦 Usage
+## 📦 Features
+
+- Scrapes top 50 YouTube videos for any keyword
+- Saves metadata (title, channel, published date, etc.) to `metadata.csv`
+- Downloads video thumbnails to a `thumbnails/` directory
+- Command-line interface using `argparse`
+- Clean output with progress bars (`tqdm`)
+
+---
+
+## 🚀 Getting Started
+
+### 1. 📁 Clone the Repository
 
 ```bash
-python scraper.py --platform youtube --target https://www.youtube.com/@channel_name
+git clone https://github.com/noobg0d/youtube_Scrapper.git
+cd youtube_Scrapper
+````
+
+### 2. 🐍 Set Up Your Environment
+
+Create a virtual environment (recommended):
+
+```bash
+conda create -n yt_scraper python=3.10 -y
+conda activate yt_scraper
 ```
 
-Arguments:
+Or use `venv`:
 
-* `--platform`: Platform name (currently only `youtube` supported)
-* `--target`: Channel URL or video URL
+```bash
+python -m venv yt_scraper
+yt_scraper\Scripts\activate  # Windows
+source yt_scraper/bin/activate  # Linux/macOS
+```
+
+### 3. 📦 Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. 🔑 Add Your YouTube API Key
+
+* Get an API key from [Google Cloud Console](https://console.cloud.google.com/).
+* Enable **YouTube Data API v3**.
+* Open `scrape_posts.py` and replace the `API_KEY` placeholder with your actual key:
+
+```python
+API_KEY = "YOUR_YOUTUBE_API_KEY"
+```
 
 ---
 
-## 📁 Output
+## 🛠️ How to Use
 
-* `metadata.csv`: Contains scraped video metadata
-* `thumbnails/`: Folder with downloaded thumbnail images
-* Timestamped filenames prevent accidental overwrites
+Run the script via terminal:
+
+```bash
+python scrape_posts.py --platform youtube --target "<your search keyword>"
+```
+
+**Examples:**
+
+```bash
+python scrape_posts.py --platform youtube --target "chess"
+python scrape_posts.py --platform youtube --target "machine learning"
+```
+
+**Output:**
+
+* Metadata saved to `metadata.csv`
+* Thumbnails downloaded to `/thumbnails/` folder
 
 ---
 
 ## ⚠️ Challenges Faced & Solutions
 
+<details>
+<summary>Click to expand</summary>
+
 ### 1. 🔐 API Key Handling & Quota Exhaustion
 
-**Challenge**: The API key often became invalid or exceeded quota during testing.
+* Managed `HttpError` and added exception handling.
+* Optimized request parameters to reduce quota usage.
 
-**Solution**:
+### 2. 🧵 CLI Argument Handling
 
-* Used valid **YouTube Data API v3** keys from Google Cloud Console
-* Added structured error handling using `try-except` for `HttpError`
-* Limited API usage by specifying only required fields (`part` and `fields`)
+* Implemented `argparse` to support multiple platforms and targets.
 
----
+### 3. 💾 File I/O Errors
 
-### 2. 🧵 Command-Line Integration with `argparse`
+* Encountered `PermissionError` when `metadata.csv` was already open in Excel.
+* Solution: closed file manually or used timestamped filenames.
 
-**Challenge**: Needed CLI-based flexibility for different platforms.
+### 4. 🖼️ Thumbnail Download Failures
 
-**Solution**:
+* Sanitized filenames to prevent OS errors.
+* Truncated titles and used regex to remove forbidden characters.
 
-* Used Python’s `argparse` to parse `--platform` and `--target` arguments
-* Handled incorrect/missing arguments with helpful error messages
-* Set foundation for future multi-platform scraping
+### 5. 🌿 Git Issues
 
----
+* Handled `src refspec main does not match any` and remote origin problems by resetting the Git branch and remote URL.
 
-### 3. 💾 Permission Denied While Writing Output
-
-**Challenge**: Faced `PermissionError: [Errno 13]` due to open `metadata.csv` file.
-
-**Solution**:
-
-* Added `try-except` blocks around file I/O
-* Included user warnings for open files
-* Used timestamp-based naming (`metadata_YYYYMMDD.csv`) to avoid overwrites
+</details>
 
 ---
 
-### 4. 🖼️ Downloading and Naming Thumbnails Reliably
-
-**Challenge**: Thumbnail downloads failed due to invalid or excessively long filenames from video titles.
-
-**Solution**:
-
-* Used `re.sub()` to sanitize file names (`\ / : * ? " < > |` removed)
-* Truncated names to 100 characters
-* Used `tqdm` for thumbnail download progress bars
-
----
-
-### 5. 🌿 Git/GitHub Integration Issues
-
-**Challenge**: Encountered common Git issues like `src refspec main does not match any` and push failures.
-
-**Solution**:
-
-```bash
-git branch -M main
-git remote remove origin
-git remote add origin https://github.com/noobg0d/youtube_Scrapper.git
-git push -u origin main
-```
-
----
-
-## 🧱 Project Structure
+## 📁 Project Structure
 
 ```
 youtube_Scrapper/
-├── thumbnails/           # Downloaded thumbnail images
-├── metadata.csv          # Scraped video metadata
-├── scraper.py            # Main script
-├── requirements.txt      # Python dependencies
-└── README.md             # Project documentation
+│
+├── scrape_posts.py         # Main script
+├── metadata.csv            # Output file (auto-generated)
+├── requirements.txt        # Required packages
+├── thumbnails/             # Downloaded thumbnails (auto-generated)
+└── README.md               # This file
 ```
 
 ---
 
-## 📜 License
+## 📌 Dependencies
 
-This project is licensed under the MIT License. See `LICENSE` for more details.
+* `google-api-python-client`
+* `pandas`
+* `tqdm`
+* `requests`
+* `argparse` (standard library)
 
----
+Install all using:
 
+```bash
+pip install -r requirements.txt
+```
 
