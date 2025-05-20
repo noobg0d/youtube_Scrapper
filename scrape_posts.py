@@ -11,7 +11,7 @@ parser.add_argument('--platform', type=str, required=True, help='Platform to scr
 parser.add_argument('--target', type=str, required=True, help='Search term or hashtag')
 args = parser.parse_args()
 
-API_KEY = "AIzaSyCEx-CjtLiQluv7jF8urrAO87doEj3yJ20"  
+API_KEY = "secret"  
 YOUTUBE_API_SERVICE_NAME = "youtube"
 YOUTUBE_API_VERSION = "v3"
 THUMBNAILS_DIR = "thumbnails"
