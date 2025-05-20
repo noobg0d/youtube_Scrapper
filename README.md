@@ -1,8 +1,4 @@
-Here you go, Pranesh — a **complete `README.md`** file that covers everything from cloning the repo to running the script, with all the advanced details included.
 
----
-
-````markdown
 # 🎥 YouTube Scraper CLI Tool
 
 A lightweight Python script that fetches metadata and thumbnails from YouTube videos based on a search keyword. Useful for research, dataset creation, or content analysis.
