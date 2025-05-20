@@ -1,5 +1,5 @@
 
-📺 YouTube Scraper
+📺 YouTube Scrapper
 
 A flexible, command-line-based YouTube metadata and thumbnail scraper using the YouTube Data API v3. Built for developers, researchers, and content analysts who want structured access to channel or video metadata without using a browser.
 
