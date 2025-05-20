@@ -7,11 +7,11 @@ A lightweight Python script that fetches metadata and thumbnails from YouTube vi
 
 ## 📦 Features
 
-- Scrapes top 50 YouTube videos for any keyword
-- Saves metadata (title, channel, published date, etc.) to `metadata.csv`
-- Downloads video thumbnails to a `thumbnails/` directory
-- Command-line interface using `argparse`
-- Clean output with progress bars (`tqdm`)
+- 🔎 Scrapes top 50 YouTube videos for any keyword
+- 📝 Saves metadata (title, channel, published date, etc.) to `metadata.csv`
+- 🖼️ Downloads video thumbnails to a `thumbnails/` directory
+- 💻 Command-line interface using `argparse`
+- 📊 Clean output with progress bars (`tqdm`)
 
 ---
 
@@ -26,19 +26,19 @@ cd youtube_Scrapper
 
 ### 2. 🐍 Set Up Your Environment
 
-Create a virtual environment (recommended):
+Using conda:
 
 ```bash
 conda create -n yt_scraper python=3.10 -y
 conda activate yt_scraper
 ```
 
-Or use `venv`:
+Or using venv:
 
 ```bash
 python -m venv yt_scraper
 yt_scraper\Scripts\activate  # Windows
-source yt_scraper/bin/activate  # Linux/macOS
+source yt_scraper/bin/activate  # macOS/Linux
 ```
 
 ### 3. 📦 Install Dependencies
@@ -49,9 +49,10 @@ pip install -r requirements.txt
 
 ### 4. 🔑 Add Your YouTube API Key
 
-* Get an API key from [Google Cloud Console](https://console.cloud.google.com/).
-* Enable **YouTube Data API v3**.
-* Open `scrape_posts.py` and replace the `API_KEY` placeholder with your actual key:
+* Go to [Google Cloud Console](https://console.cloud.google.com/)
+* Enable **YouTube Data API v3**
+* Create an API key
+* Open `scrape_posts.py` and replace:
 
 ```python
 API_KEY = "YOUR_YOUTUBE_API_KEY"
@@ -61,7 +62,7 @@ API_KEY = "YOUR_YOUTUBE_API_KEY"
 
 ## 🛠️ How to Use
 
-Run the script via terminal:
+Run the script from terminal like this:
 
 ```bash
 python scrape_posts.py --platform youtube --target "<your search keyword>"
@@ -74,42 +75,37 @@ python scrape_posts.py --platform youtube --target "chess"
 python scrape_posts.py --platform youtube --target "machine learning"
 ```
 
-**Output:**
+**Outputs:**
 
-* Metadata saved to `metadata.csv`
-* Thumbnails downloaded to `/thumbnails/` folder
+* CSV file: `metadata.csv`
+* Images: downloaded to `/thumbnails/`
 
 ---
 
-## ⚠️ Challenges Faced & Solutions
+## ⚠️ Challenges Faced & How They Were Solved
 
-<details>
-<summary>Click to expand</summary>
+### 1. 🔐 API Key Quota & Invalid Requests
 
-### 1. 🔐 API Key Handling & Quota Exhaustion
+**Challenge:**
+Initially, the script failed due to invalid API keys or exhausting the quota with multiple test runs.
 
-* Managed `HttpError` and added exception handling.
-* Optimized request parameters to reduce quota usage.
+**Solution:**
 
-### 2. 🧵 CLI Argument Handling
+* Generated a valid key from Google Cloud Console.
+* Wrapped the API call inside a `try-except` block to handle `HttpError` gracefully.
+* Reduced quota usage by only requesting specific fields (`part=snippet`, etc.).
 
-* Implemented `argparse` to support multiple platforms and targets.
+---
 
-### 3. 💾 File I/O Errors
+### 2. 🖼️ Thumbnail Download Failures
 
-* Encountered `PermissionError` when `metadata.csv` was already open in Excel.
-* Solution: closed file manually or used timestamped filenames.
+**Challenge:**
+Some thumbnails failed to download due to invalid characters (e.g., `\/:*?"<>|`) in video titles used as filenames.
 
-### 4. 🖼️ Thumbnail Download Failures
+**Solution:**
 
-* Sanitized filenames to prevent OS errors.
-* Truncated titles and used regex to remove forbidden characters.
-
-### 5. 🌿 Git Issues
-
-* Handled `src refspec main does not match any` and remote origin problems by resetting the Git branch and remote URL.
-
-</details>
+* Used `re.sub(r'[\\/*?:"<>|]', "", filename)` to sanitize titles.
+* Truncated filenames to avoid OS limits.
 
 ---
 
@@ -117,27 +113,30 @@ python scrape_posts.py --platform youtube --target "machine learning"
 
 ```
 youtube_Scrapper/
-│
-├── scrape_posts.py         # Main script
+├── scrape_posts.py         # Main scraper script
 ├── metadata.csv            # Output file (auto-generated)
-├── requirements.txt        # Required packages
 ├── thumbnails/             # Downloaded thumbnails (auto-generated)
-└── README.md               # This file
+├── requirements.txt        # Package dependencies
+└── README.md               # Project documentation
 ```
 
 ---
 
-## 📌 Dependencies
+## 📌 Requirements
 
-* `google-api-python-client`
-* `pandas`
-* `tqdm`
-* `requests`
-* `argparse` (standard library)
+Your `requirements.txt` should include:
 
-Install all using:
+```
+google-api-python-client
+pandas
+tqdm
+requests
+```
+
+Install with:
 
 ```bash
 pip install -r requirements.txt
 ```
 
+---
